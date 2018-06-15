@@ -47,7 +47,6 @@ namespace WebApi.Controllers
                 return View();
             try
             {
-                // TODO: Add insert logic here
                 await repository.SaveIssue(issue);
                 return RedirectToAction(nameof(Index));
             }
@@ -70,7 +69,6 @@ namespace WebApi.Controllers
         {
             try
             {
-                // TODO: Add update logic here
                 await repository.SaveIssue(issue);
                 return RedirectToAction(nameof(Index));
             }
