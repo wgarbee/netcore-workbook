@@ -1,0 +1,43 @@
+@page
+@model BaseProject.Pages.IssueTasks.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>IssueTask</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IssueTaskVM.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IssueTaskVM.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IssueTaskVM.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IssueTaskVM.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IssueTaskVM.Assignee)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IssueTaskVM.Assignee.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IssueTaskVM.Issue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IssueTaskVM.Issue.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.IssueTaskVM.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

@@ -1,0 +1,47 @@
+@page "{issueId:int}"
+@model BaseProject.Pages.IssueTasks.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>IssueTask</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IssueTaskVM.Description" class="control-label"></label>
+                <input asp-for="IssueTaskVM.Description" class="form-control" />
+                <span asp-validation-for="IssueTaskVM.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IssueTaskVM.Status" class="control-label"></label>
+                <select asp-for="IssueTaskVM.Status" class="form-control" asp-items="ViewBag.StatusId"></select>
+                <span asp-validation-for="IssueTaskVM.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IssueTaskVM.AssigneeId" class="control-label"></label>
+                <select asp-for="IssueTaskVM.AssigneeId" class="form-control" asp-items="ViewBag.AssigneeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IssueTaskVM.IssueId" class="control-label"></label>
+                <select asp-for="IssueTaskVM.IssueId" class="form-control" asp-items="ViewBag.IssueId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

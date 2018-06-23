@@ -1,0 +1,37 @@
+@page "{id:int}"
+@model BaseProject.Pages.Users.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserVM.Username)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserVM.Username)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserVM.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserVM.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserVM.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserVM.FirstName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.UserVM.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

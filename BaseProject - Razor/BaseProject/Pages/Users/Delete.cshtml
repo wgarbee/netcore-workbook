@@ -1,0 +1,40 @@
+@page "{id:int}"
+@model BaseProject.Pages.Users.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserVM.Username)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserVM.Username)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserVM.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserVM.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserVM.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserVM.FirstName)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="UserVM.Id" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>
