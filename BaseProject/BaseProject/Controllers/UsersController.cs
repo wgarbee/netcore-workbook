@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BaseProject.Data;
 using BaseProject.Models;
+using BaseProject.Data.Models;
 
 namespace BaseProject.Controllers
 {
@@ -59,7 +60,7 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Username,LastName,FirstName")] AppUser user)
+        public async Task<IActionResult> Create(User user)
         {
             if (ModelState.IsValid)
             {
@@ -93,7 +94,7 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Edit/{id:int}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,LastName,FirstName")] AppUser user)
+        public async Task<IActionResult> Edit(int id, [FromForm] User user)
         {
             if (id != user.Id)
             {

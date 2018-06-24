@@ -1,4 +1,6 @@
-﻿using BaseProject.Models;
+﻿using BaseProject.Data.Models;
+using BaseProject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ namespace BaseProject.Data
     {
         public static void Initialize(IssueTrackerContext context)
         {
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
             
             if (context.Users.Any())
             {
@@ -19,7 +21,7 @@ namespace BaseProject.Data
 
             var users = new []
             {
-                new AppUser{ FirstName = "System", LastName="Administrator", Username = "admin"}
+                new User{ FirstName = "System", LastName="Administrator", Username = "admin"}
             };
 
             context.Users.AddRange(users);

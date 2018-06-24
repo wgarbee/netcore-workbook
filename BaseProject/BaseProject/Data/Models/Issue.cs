@@ -1,13 +1,15 @@
-﻿using System;
+﻿using BaseProject.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BaseProject.Models
+namespace BaseProject.Data.Models
 {
     public class Issue
     {
         public int Id { get; set; }
+        //public string Title { get; set; }
         public string Description { get; set; }
         public Status Status { get; set; }
 
@@ -15,7 +17,7 @@ namespace BaseProject.Models
         public int? AssigneeId { get; set; }
 
         // Navigation Properties
-        public AppUser Assignee { get; set; }
+        public User Assignee { get; set; }
         public ICollection<IssueTask> Tasks { get; set; }
     }
 }

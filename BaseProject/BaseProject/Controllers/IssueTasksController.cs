@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BaseProject.Data;
 using BaseProject.Models;
+using BaseProject.Data.Models;
 
 namespace BaseProject.Controllers
 {
@@ -24,7 +25,9 @@ namespace BaseProject.Controllers
         [Route("")]
         public async Task<IActionResult> Index()
         {
-            var issueTrackerContext = _context.IssueTasks.Include(i => i.Assignee).Include(i => i.Issue);
+            var issueTrackerContext = _context.IssueTasks
+                .Include(i => i.Assignee)
+                .Include(i => i.Issue);
             return View(await issueTrackerContext.ToListAsync());
         }
 
@@ -62,11 +65,11 @@ namespace BaseProject.Controllers
         [Route("Create")]
         public IActionResult Create(int? issueId)
         {
-            ViewData["AssigneeId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["IssueId"] = new SelectList(_context.Issues, "Id", "Id");
-            ViewData["StatusId"] = new SelectList(Enum.GetValues(typeof(Status)));
+            ViewData["AssigneeId"] = new UserSelectList(_context.Users);
+            ViewData["IssueId"] = issueId.HasValue ? new IssueSelectList(_context.Issues, issueId.Value) : new IssueSelectList(_context.Issues);
+            ViewData["StatusId"] = new StatusSelectList();
             var model = new IssueTaskViewModel {
-                CanEditIssue = ControllerContext.RouteData.Values.Keys.All(k => !k.Equals(nameof(IssueTask.IssueId), StringComparison.CurrentCultureIgnoreCase))
+                CanEditIssue = !issueId.HasValue
             };
             return View(model);
         }
@@ -77,7 +80,7 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( IssueTask issueTask)
+        public async Task<IActionResult> Create([Bind("Id,Description,Status,AssigneeId,IssueId")] IssueTask issueTask)
         {
             if (ModelState.IsValid)
             {
@@ -85,8 +88,9 @@ namespace BaseProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Issues", new { id = issueTask.IssueId });
             }
-            ViewData["AssigneeId"] = new SelectList(_context.Users, "Id", "Id", issueTask.AssigneeId);
-            ViewData["IssueId"] = new SelectList(_context.Issues, "Id", "Id", issueTask.IssueId);
+            ViewData["AssigneeId"] = issueTask.AssigneeId.HasValue ? new UserSelectList(_context.Users, issueTask.AssigneeId.Value) : new UserSelectList(_context.Users);
+            ViewData["IssueId"] = new IssueSelectList(_context.Issues, issueTask.IssueId);
+            ViewData["StatusId"] = new StatusSelectList(issueTask.Status);
             return View(issueTask);
         }
 
@@ -104,9 +108,9 @@ namespace BaseProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["AssigneeId"] = new SelectList(_context.Users, "Id", "Id", issueTask.AssigneeId);
-            ViewData["IssueId"] = new SelectList(_context.Issues, "Id", "Id", issueTask.IssueId);
-            ViewData["StatusId"] = new SelectList(Enum.GetValues(typeof(Status)));
+            ViewData["AssigneeId"] = issueTask.AssigneeId.HasValue ? new UserSelectList(_context.Users, issueTask.AssigneeId.Value) : new UserSelectList(_context.Users);
+            ViewData["IssueId"] = new IssueSelectList(_context.Issues, issueTask.IssueId);
+            ViewData["StatusId"] = new StatusSelectList();
             return View(issueTask);
         }
 
@@ -143,8 +147,9 @@ namespace BaseProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssigneeId"] = new SelectList(_context.Users, "Id", "Id", issueTask.AssigneeId);
-            ViewData["IssueId"] = new SelectList(_context.Issues, "Id", "Id", issueTask.IssueId);
+            ViewData["AssigneeId"] = issueTask.AssigneeId.HasValue ? new UserSelectList(_context.Users, issueTask.AssigneeId.Value) : new UserSelectList(_context.Users);
+            ViewData["IssueId"] = new IssueSelectList(_context.Issues, issueTask.IssueId);
+            ViewData["StatusId"] = new StatusSelectList(issueTask.Status);
             return View(issueTask);
         }
 

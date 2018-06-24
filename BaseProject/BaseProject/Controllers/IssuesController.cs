@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BaseProject.Data;
 using BaseProject.Models;
+using BaseProject.Data.Models;
 
 namespace BaseProject.Controllers
 {
@@ -24,7 +25,8 @@ namespace BaseProject.Controllers
         [Route("Index")]
         public async Task<IActionResult> Index()
         {
-            var issueTrackerContext = _context.Issues.Include(i => i.Assignee);
+            var issueTrackerContext = _context.Issues
+                .Include(i => i.Assignee);
             return View(await issueTrackerContext.ToListAsync());
         }
 
@@ -40,7 +42,7 @@ namespace BaseProject.Controllers
             var issue = await _context.Issues
                 .Include(i => i.Assignee)
                 .Include(i => i.Tasks)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .SingleOrDefaultAsync(m => m.Id == id);
             if (issue == null)
             {
                 return NotFound();
@@ -53,8 +55,8 @@ namespace BaseProject.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            ViewData["AssigneeId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["StatusId"] = new SelectList(Enum.GetValues(typeof(Status)));
+            ViewData["AssigneeId"] = new UserSelectList(_context.Users);
+            ViewData["StatusId"] = new StatusSelectList();
             return View();
         }
 
@@ -72,7 +74,8 @@ namespace BaseProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssigneeId"] = new SelectList(_context.Users, "Id", "Id", issue.AssigneeId);
+            ViewData["AssigneeId"] = issue.AssigneeId.HasValue ? new UserSelectList(_context.Users, issue.AssigneeId.Value) : new UserSelectList(_context.Users);
+            ViewData["StatusId"] = new StatusSelectList(issue.Status);
             return View(issue);
         }
 
@@ -90,8 +93,8 @@ namespace BaseProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["AssigneeId"] = new SelectList(_context.Users, "Id", "Id", issue.AssigneeId);
-            ViewData["StatusId"] = new SelectList(Enum.GetValues(typeof(Status)));
+            ViewData["AssigneeId"] = issue.AssigneeId.HasValue ? new UserSelectList(_context.Users, issue.AssigneeId.Value) : new UserSelectList(_context.Users);
+            ViewData["StatusId"] = new StatusSelectList(issue.Status);
             return View(issue);
         }
 
@@ -128,12 +131,13 @@ namespace BaseProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssigneeId"] = new SelectList(_context.Users, "Id", "Id", issue.AssigneeId);
+            ViewData["AssigneeId"] = new SelectList(_context.Users, nameof(Data.Models.User.Id), nameof(Data.Models.User.FullName), issue.AssigneeId);
+            ViewData["StatusId"] = new StatusSelectList(issue.Status);
             return View(issue);
         }
 
         // GET: Issues/Delete/5
-        [Route("Dlete/{id:int}")]
+        [Route("Delete/{id:int}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

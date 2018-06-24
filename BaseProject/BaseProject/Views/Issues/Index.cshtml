@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BaseProject.Models.Issue>
+﻿@model IEnumerable<BaseProject.Data.Models.Issue>
 
 @{
     ViewData["Title"] = "Index";
@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Assignee.Id)
+                @item.Assignee?.FullName
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
