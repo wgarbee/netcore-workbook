@@ -1,0 +1,26 @@
+﻿@model BaseProject.Models.Summary
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<div>
+    <h4>Summary</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OpenIssues)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OpenIssues)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OpenTasks)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OpenTasks)
+        </dd>
+    </dl>
+</div>

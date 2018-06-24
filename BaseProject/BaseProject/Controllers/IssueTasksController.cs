@@ -22,16 +22,6 @@ namespace BaseProject.Controllers
         }
 
         // GET: IssueTasks
-        [Route("")]
-        public async Task<IActionResult> Index()
-        {
-            var issueTrackerContext = _context.IssueTasks
-                .Include(i => i.Assignee)
-                .Include(i => i.Issue);
-            return View(await issueTrackerContext.ToListAsync());
-        }
-
-        // GET: IssueTasks
         [Route("{issueId:int}")]
         public async Task<IActionResult> IndexByIssue(int issueId)
         {
@@ -80,13 +70,13 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,Status,AssigneeId,IssueId")] IssueTask issueTask)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Status,AssigneeId,IssueId")] IssueTask issueTask)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(issueTask);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Issues", new { id = issueTask.IssueId });
+                return RedirectToParentIssue(issueTask.IssueId);
             }
             ViewData["AssigneeId"] = issueTask.AssigneeId.HasValue ? new UserSelectList(_context.Users, issueTask.AssigneeId.Value) : new UserSelectList(_context.Users);
             ViewData["IssueId"] = new IssueSelectList(_context.Issues, issueTask.IssueId);
@@ -96,7 +86,7 @@ namespace BaseProject.Controllers
 
         // GET: IssueTasks/Edit/5
         [Route("Edit/{id:int}")]
-        public async Task<IActionResult> Edit(int issueId, int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -120,7 +110,7 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Edit/{id:int}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Status,AssigneeId,IssueId")] IssueTask issueTask)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Status,AssigneeId,IssueId")] IssueTask issueTask)
         {
             if (id != issueTask.Id)
             {
@@ -145,7 +135,7 @@ namespace BaseProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToParentIssue(issueTask.IssueId);
             }
             ViewData["AssigneeId"] = issueTask.AssigneeId.HasValue ? new UserSelectList(_context.Users, issueTask.AssigneeId.Value) : new UserSelectList(_context.Users);
             ViewData["IssueId"] = new IssueSelectList(_context.Issues, issueTask.IssueId);
@@ -185,12 +175,17 @@ namespace BaseProject.Controllers
             var issueTask = await _context.IssueTasks.FindAsync(id);
             _context.IssueTasks.Remove(issueTask);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToParentIssue(issueTask.IssueId);
         }
 
         private bool IssueTaskExists(int id)
         {
             return _context.IssueTasks.Any(e => e.Id == id);
+        }
+
+        private IActionResult RedirectToParentIssue(int issueId)
+        {
+            return RedirectToAction("Details", "Issues", new { id = issueId });
         }
     }
 }

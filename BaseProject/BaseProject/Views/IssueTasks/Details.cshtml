@@ -7,11 +7,11 @@
 <h2>Details</h2>
 
 <div>
-    <h4>IssueTask</h4>
+    <h4>Task</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Description)
@@ -38,5 +38,5 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Issues" asp-action="Details" asp-route-id="@Model.IssueId">Back to Issue</a>
 </div>

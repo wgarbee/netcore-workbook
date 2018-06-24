@@ -1,20 +1,25 @@
 ﻿@model BaseProject.Models.IssueTaskViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Task";
 }
 
 <h2>Create</h2>
 
-<h4>IssueTask</h4>
+<h4>Task</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="AssigneeId" class="control-label"></label>
-                <select asp-for="AssigneeId" class ="form-control" asp-items="ViewBag.AssigneeId"></select>
+                <select asp-for="AssigneeId" class="form-control" asp-items="ViewBag.AssigneeId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="IssueId" class="control-label"></label>
@@ -45,7 +50,14 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @if (Model.IssueId == 0)
+    {
+        <a asp-controller="Issues" asp-action="Index">Back to Issue</a>
+    }
+    else
+    {
+        <a asp-controller="Issues" asp-action="Details" asp-route-id="@Model.IssueId">Back to Issue</a>
+    }
 </div>
 
 @section Scripts {

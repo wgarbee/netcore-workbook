@@ -66,13 +66,13 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,Status,AssigneeId")] Issue issue)
+        public async Task<IActionResult> Create([FromQuery]bool showCreateAgain, [Bind("Id,Title,Description,Status,AssigneeId")] Issue issue)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(issue);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return showCreateAgain ? RedirectToAction(nameof(Create)) : RedirectToAction(nameof(Index));
             }
             ViewData["AssigneeId"] = issue.AssigneeId.HasValue ? new UserSelectList(_context.Users, issue.AssigneeId.Value) : new UserSelectList(_context.Users);
             ViewData["StatusId"] = new StatusSelectList(issue.Status);
@@ -104,7 +104,7 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Edit/{id:int}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Status,AssigneeId")] Issue issue)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Status,AssigneeId")] Issue issue)
         {
             if (id != issue.Id)
             {

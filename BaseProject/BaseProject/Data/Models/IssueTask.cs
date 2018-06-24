@@ -10,7 +10,8 @@ namespace BaseProject.Data.Models
     public class IssueTask
     {
         public int Id { get; set; }
-        //public string Title { get; set; }
+        public string Title { get; set; }
+        [UIHint("textarea")]
         public string Description { get; set; }
         public Status Status { get; set; }
 
