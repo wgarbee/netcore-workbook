@@ -1,4 +1,5 @@
-﻿using BaseProject.Data;
+﻿using BaseProject.Areas.Identity.Data;
+using BaseProject.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,8 +19,10 @@ namespace BaseProject.Intrastructure
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<IssueTrackerContext>();
-                    DBInitializer.Initialize(context);
+                    var appContext = services.GetRequiredService<IssueTrackerContext>();
+                    var authContext = services.GetRequiredService<AuthenticationContext>();
+                    Data.DBInitializer.Initialize(appContext);
+                    Areas.Identity.Data.DBInitializer.Initialize(authContext);
                 }
                 catch (Exception ex)
                 {
