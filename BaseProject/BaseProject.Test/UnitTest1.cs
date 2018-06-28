@@ -1,3 +1,5 @@
+using BaseProject.Data;
+using FluentAssertions;
 using System;
 using Xunit;
 
@@ -8,7 +10,7 @@ namespace BaseProject.Test
         [Fact]
         public void Test1()
         {
-            Assert.True(true);
+            "apple".Should().StartWith("a").And.EndWith("e").And.HaveLength(5);
         }
     }
 }
