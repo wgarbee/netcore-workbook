@@ -10,6 +10,8 @@ namespace IssueTracker.Domain.Contracts
 
         string Title { get; set; }
 
+        string Estimate { get; set; }
+
         string Description { get; set; }
 
         string Status { get; set; }

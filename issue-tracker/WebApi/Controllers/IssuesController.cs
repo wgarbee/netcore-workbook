@@ -52,6 +52,7 @@ namespace WebApi.Controllers
             }
             catch
             {
+                ModelState.AddModelError("", "Error while saving");
                 return View();
             }
         }

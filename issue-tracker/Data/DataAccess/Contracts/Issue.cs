@@ -9,6 +9,7 @@ namespace IssueTracker.DataAccess.Contracts
     {
         public int? Id { get; set; }
         public string Title { get; set; }
+        public decimal Estimate { get; set; }
         public string Description { get; set; }
         public IssueType Type { get; set; }
     }
