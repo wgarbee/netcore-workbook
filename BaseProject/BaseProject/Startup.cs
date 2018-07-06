@@ -29,7 +29,6 @@ namespace BaseProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging();
             services.AddDbContext<IssueTrackerContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
@@ -49,6 +48,7 @@ namespace BaseProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseMiddleware<Intrastructure.PerfromanceMonitorMiddleware>();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -57,18 +57,14 @@ namespace BaseProject
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseMiddleware<Intrastructure.ErrorCodeTranslatorMiddleware>();
+            app.UseMiddleware<Intrastructure.UnwrapExceptionMiddleware>();
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseMvc();
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
         }
     }
 }
