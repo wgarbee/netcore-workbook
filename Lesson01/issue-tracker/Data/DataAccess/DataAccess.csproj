@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <AssemblyName>IssueTracker.DataAccess</AssemblyName>
+    <RootNamespace>IssueTracker.DataAccess</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Internal\Domain.Internal\Domain.Internal.csproj" />
+    <ProjectReference Include="..\..\Public\Domain\Domain.csproj" />
+  </ItemGroup>
+
+</Project>
