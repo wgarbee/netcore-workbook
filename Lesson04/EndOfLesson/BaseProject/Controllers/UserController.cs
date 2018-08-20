@@ -38,6 +38,8 @@ namespace BaseProject.Controllers
         // GET: Users
         public async Task<IActionResult> Create(User user, CancellationToken cancellationToken)
         {
+            if (!ModelState.IsValid)
+                return View(user);
             _context.Users.Add(user);
             await _context.SaveChangesAsync(cancellationToken);
             return RedirectToAction(nameof(Index));
