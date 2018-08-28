@@ -1,6 +1,7 @@
 ﻿using BaseProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using BaseProject.Areas.Identity.Data;
 
 namespace BaseProject.Data
 {

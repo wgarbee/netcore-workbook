@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BaseProject.Areas.Identity.Data;
+using BaseProject.Areas.Identity.Debugging;
 using BaseProject.Areas.Identity.Services;
 using BaseProject.Cookies;
 using BaseProject.Cookies.Authorization;
+using BaseProject.Migrations.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -43,10 +46,6 @@ namespace BaseProject.Areas.Identity
             {
                 authBuilder.AddCookie(opts =>
                 {
-                    opts.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                    opts.LoginPath = "/Identity/Account/Login";
-                    opts.LogoutPath = "/Identity/Account/Logout";
-                    opts.DataProtectionProvider = new PlainTextDataProtectionProvider();
                     opts.EventsType = typeof(InspectCookieAuthenticationEvents);
                 });
                 services.AddScoped<InspectCookieAuthenticationEvents>();
@@ -57,8 +56,17 @@ namespace BaseProject.Areas.Identity
                 services.AddScoped<IPasswordHasher<User>, PlainTextPasswordHasher>();
                 services.AddScoped<IAuthorizationService, InspectAuthorizationService>();
                 services.AddScoped<DefaultAuthorizationService>();
+                services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomUserClaimsPrincipalFactory>();
             }
+
             return services;
+        }
+
+        public static bool IsAdmin(this IdentityRole role)
+        {
+            if (role.NormalizedName == null)
+                return false;
+            return role.NormalizedName.Equals(ScriptDefaultRoles.NormalizedAdminName, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

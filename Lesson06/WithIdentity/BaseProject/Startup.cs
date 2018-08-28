@@ -46,7 +46,11 @@ namespace BaseProject
 
             app.UseStaticFiles();
             app.UseAcaAuthentication();
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("AreaRoute", "{area:exists}/{controller}/{action}/{id?}");
+                routes.MapRoute("DefaultRoute", "{area:exists}/{controller}/{action}/{id?}");
+            });
         }
 
         private void EnsureDatabaseUpdated(IApplicationBuilder app)

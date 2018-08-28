@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BaseProject.Data;
 using BaseProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +47,7 @@ namespace BaseProject.Controllers
 
         // GET: Issue/Create
         [Route("Create")]
+        [Authorize]
         public IActionResult Create()
         {
             return View(new IssueViewModel());
@@ -57,6 +59,7 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Status")] Issue issue)
         {
             if (ModelState.IsValid)
@@ -70,6 +73,7 @@ namespace BaseProject.Controllers
 
         // GET: Issue/Edit/5
         [Route("Edit/{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,6 +95,7 @@ namespace BaseProject.Controllers
         [HttpPost]
         [Route("Edit/{id:int}")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Status")] Issue issue)
         {
             if (id != issue.Id)
@@ -123,6 +128,7 @@ namespace BaseProject.Controllers
 
         // GET: Issue/Delete/5
         [Route("Delete/{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +150,7 @@ namespace BaseProject.Controllers
         [HttpPost, ActionName("Delete")]
         [Route("Delete/{id:int}")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var issue = await _context.Issues.FindAsync(id);

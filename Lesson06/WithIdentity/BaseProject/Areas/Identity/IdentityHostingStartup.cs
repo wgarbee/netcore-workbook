@@ -1,13 +1,7 @@
-﻿using System.Linq;
+﻿using System;
 using BaseProject.Areas.Identity.Data;
-using BaseProject.Areas.Identity.Services;
-using BaseProject.Cookies;
-using BaseProject.Cookies.Authorization;
 using BaseProject.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,8 +12,6 @@ namespace BaseProject.Areas.Identity
 {
     public class IdentityHostingStartup : IHostingStartup
     {
-        private static bool CannotSeemToFigureOutWhatIsGoingOnMode = false;
-
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) =>
@@ -28,8 +20,28 @@ namespace BaseProject.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("BaseProject")));
 
-                services.AddDefaultIdentity<User>()
-                    .AddEntityFrameworkStores<IdentityContext>();
+                services.AddIdentity<User, IdentityRole>(opts =>
+                {
+                    // this is all very bad, but is fine for class
+                    opts.Password.RequireDigit = false;
+                    opts.Password.RequiredLength = 1;
+                    opts.Password.RequireLowercase = false;
+                    opts.Password.RequireNonAlphanumeric = false;
+                    opts.Password.RequireUppercase = false;
+                    opts.Password.RequiredUniqueChars = 1;
+
+                    opts.Lockout.MaxFailedAccessAttempts = -1;
+                    opts.Lockout.DefaultLockoutTimeSpan = default(TimeSpan);
+                    opts.Lockout.AllowedForNewUsers = false;
+
+                    opts.SignIn.RequireConfirmedEmail = false;
+                    opts.SignIn.RequireConfirmedPhoneNumber = false;
+
+                    opts.User.RequireUniqueEmail = true;
+                    opts.User.AllowedUserNameCharacters = opts.User.AllowedUserNameCharacters; // keep default
+                })
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<IdentityContext>();
             });
         }
     }
