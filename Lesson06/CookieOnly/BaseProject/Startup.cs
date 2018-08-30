@@ -21,8 +21,16 @@ namespace BaseProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(opts =>
+            {
+                opts.AccessDeniedPath = "/MyOwnUsers/SignIn";
+                opts.LoginPath = "/MyOwnUsers/SignIn";
+                opts.LogoutPath = "/MyOwnUsers/Logout";
+            });
 
             // Comment out if you do not have a local Sql Server installed
             services.AddDbContext<ApplicationContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("BaseProject")));
@@ -45,6 +53,7 @@ namespace BaseProject
             }
 
             app.UseStaticFiles();
+
             app.UseAuthentication();
             app.UseMvc();
         }
