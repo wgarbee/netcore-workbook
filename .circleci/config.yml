@@ -9,6 +9,9 @@ jobs:
         - master
     steps:
       - run:
+          name: print current directory
+          command: pwd
+      - run:
           name: Change to lesson directory
           command: cd Lesson08/StartOfLesson
       - run:
