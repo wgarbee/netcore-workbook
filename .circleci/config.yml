@@ -5,8 +5,9 @@ jobs:
     docker:
       - image: microsoft/dotnet:2.1-sdk
     branches:
+      only:
+        - master
     steps:
-      - checkout
       - run:
           name: Change to lesson directory
           command: cd Lesson08/StartOfLesson
