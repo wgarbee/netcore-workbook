@@ -1,7 +1,7 @@
 version: 2
 jobs:
-  buildLesson8:
-    environment:
+  build Lesson 8:
+    working_directory: ~/daniefer/netcore-workbook
     docker:
       - image: microsoft/dotnet:2.1-sdk
     branches:
