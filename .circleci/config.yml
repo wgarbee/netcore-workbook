@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  buildLesson8:
+    environment:
+    docker:
+      - image: microsoft/dotnet:2.1-sdk
+    branches:
+    steps:
+      - checkout
+      - run:
+          name: Change to lesson directory
+          command: cd Lesson08/StartOfLesson
+      - run:
+          name: Restore packages for all projects in solution
+          command: netcore restore
+      - run:
+          name: Build all projects in solution
+          command: netcore build
+      - run:
+          name: Run tests in test project
+          command: dotnet test .\BaseProject.Test\BaseProject.Test.csproj
