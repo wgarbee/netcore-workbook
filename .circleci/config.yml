@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build Lesson 8:
+  build:
     working_directory: ~/daniefer/netcore-workbook
     docker:
       - image: microsoft/dotnet:2.1-sdk
