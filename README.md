@@ -29,8 +29,6 @@
 * Hosting a& Deployment
 * Checkpoint 2
 
-
-
 Recommended readings
 * Anti-pattern books
 * Software patterns
