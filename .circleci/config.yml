@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/daniefer/netcore-workbook
+    working_directory: ~/netcore-workbook
     docker:
       - image: microsoft/dotnet:2.1-sdk
     branches:
