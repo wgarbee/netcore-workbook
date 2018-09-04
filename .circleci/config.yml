@@ -1,13 +1,41 @@
+# version: 2
+# jobs:
+  # build:
+    # docker:
+      # - image: debian:stretch
+    # steps:
+      # - checkout
+      # - run:
+          # name: Greeting
+          # command: echo Hello, world.
+      # - run:
+          # name: Print the Current Time
+          # command: date
+
+
 version: 2
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: microsoft/dotnet:2.1-sdk
+    # working_directory: ~/netcore-workbook
+    # branches:
+      # only:
+        # - master
     steps:
       - checkout
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: print current directory
+          command: pwd
       - run:
-          name: Print the Current Time
-          command: date
+          name: Change to lesson directory
+          command: cd Lesson08/StartOfLesson
+      - run:
+          name: Restore packages for all projects in solution
+          command: netcore restore
+      - run:
+          name: Build all projects in solution
+          command: netcore build
+      - run:
+          name: Run tests in test project
+          command: dotnet test .\BaseProject.Test\BaseProject.Test.csproj
