@@ -19,9 +19,9 @@ jobs:
     docker:
       - image: microsoft/dotnet:2.1-sdk
     working_directory: ~/netcore-workbook
-    branches:
-      only:
-        - master
+#     branches:
+#       only:
+#         - master
     steps:
       - checkout
       - run:
