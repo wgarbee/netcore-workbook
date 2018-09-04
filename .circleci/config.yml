@@ -14,10 +14,10 @@ jobs:
           command: cd Lesson08/StartOfLesson
       - run:
           name: Restore packages for all projects in solution
-          command: netcore restore
+          command: dotnet restore
       - run:
           name: Build all projects in solution
-          command: netcore build
+          command: dotnet build
       - run:
           name: Run tests in test project
           command: dotnet test .\BaseProject.Test\BaseProject.Test.csproj
