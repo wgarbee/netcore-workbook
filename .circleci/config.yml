@@ -7,17 +7,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: print current directory
-          command: pwd
-      - run:
-          name: Change to lesson directory
-          command: cd Lesson08/StartOfLesson
-      - run:
           name: Restore packages for all projects in solution
-          command: dotnet restore
+          command: dotnet restore Lesson08/StartOfLesson
       - run:
           name: Build all projects in solution
-          command: dotnet build
+          command: dotnet build Lesson08/StartOfLesson
       - run:
           name: Run tests in test project
-          command: dotnet test .\BaseProject.Test\BaseProject.Test.csproj
+          command: dotnet test Lesson08/StartOfLesson/BaseProject.Test/BaseProject.Test.csproj
