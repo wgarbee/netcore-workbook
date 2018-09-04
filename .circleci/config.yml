@@ -1,25 +1,17 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/daniefer/netcore-workbook
     docker:
       - image: microsoft/dotnet:2.1-sdk
-    branches:
-      only:
-        - master
+    working_directory: ~/netcore-workbook
     steps:
-      - run:
-          name: print current directory
-          command: pwd
-      - run:
-          name: List directory
-          command: ls
+      - checkout
       - run:
           name: Restore packages for all projects in solution
-          command: netcore restore
+          command: dotnet restore Lesson08/StartOfLesson
       - run:
           name: Build all projects in solution
-          command: netcore build
+          command: dotnet build Lesson08/StartOfLesson
       - run:
           name: Run tests in test project
-          command: dotnet test .\BaseProject.Test\BaseProject.Test.csproj
+          command: dotnet test Lesson08/StartOfLesson/BaseProject.Test/BaseProject.Test.csproj
