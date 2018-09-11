@@ -1,8 +1,10 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using BaseProject.Models;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using Xunit;
 
 namespace BaseProject.End2EndTests
@@ -20,34 +22,62 @@ namespace BaseProject.End2EndTests
             }
         }
 
-        [Fact]
-        public void CreatingNewIssuePopulatesListView()
-        {
-            var taskTitle = "I am a new task";
-            var taskDescription = "My first task!";
 
+        [Fact]
+        public void CreatingNewIssueSavesCorrectly()
+        {
+            var data = new
+            {
+                Title = "Issue",
+                Description = "Fix all the bugs",
+                Status = IssueStatus.Done
+            };
             using (var driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)))
             {
                 driver.Navigate().GoToUrl(@"https://localhost:5000");
-                var links = driver.FindElementsByXPath("//a");
-                var createLink = links.FirstOrDefault(link => link.Text == "Create New");
-                createLink.Click();
+                // Using this below to verify the record we created is new and not an old one
+                var existing = driver.FindElementsByCssSelector("tbody td a[href^='/Issue/Edit/']");
+                var existingIds = existing.Select(x => x.GetAttribute("href").Substring(x.GetAttribute("href").LastIndexOf("/") + 1)).Select(x => int.Parse(x)).ToList();
+
+                var createNewLink = driver.FindElementByLinkText("Create New");
+                Assert.Contains("Create New", createNewLink.Text);
+                createNewLink.Click();
+                /* PAGE CHANGE */
+                Assert.Equal(@"https://localhost:5000/Issue/Create", driver.Url);
                 var titleInput = driver.FindElementById("Title");
+                titleInput.SendKeys(data.Title);
                 var descriptionInput = driver.FindElementById("Description");
-                var saveButton = driver.FindElementByCssSelector("input.btn.btn-default");
-                titleInput.SendKeys(taskTitle);
-                descriptionInput.SendKeys(taskDescription);
-                saveButton.Click();
-                var grid = driver.FindElementsByCssSelector("tbody tr");
-                foreach (var row in grid)
+                descriptionInput.SendKeys(data.Description);
+                var statusSelect = driver.FindElementById("Status");
+                var selectElement = new SelectElement(statusSelect);
+                selectElement.SelectByValue($"{(int)data.Status}");
+                var createButton = driver.FindElementByCssSelector("input.btn.btn-default");
+                Assert.Equal("Create", createButton.GetAttribute("value"));
+                createButton.Click();
+                /* PAGE CHANGE */
+                Assert.Equal(@"https://localhost:5000/Issue", driver.Url);
+                var table = driver.FindElementByTagName("tbody");
+                var rows = table.FindElements(By.CssSelector("tr"));
+                foreach (var row in rows)
                 {
-                    var columns = row.FindElements(By.CssSelector("td"));
-                    var col1 = columns.FirstOrDefault();
-                    var col2 = columns.Skip(1).FirstOrDefault();
-                    if (col1.Text == taskTitle && col2.Text == taskDescription)
-                        return;
+                    var columns = row.FindElements(By.TagName("td"));
+                    var col1 = columns.First();
+                    var col2 = columns.Skip(1).First();
+                    var col3 = columns.Skip(2).First();
+
+                    var edit = col3.FindElement(By.CssSelector("a[href^='/Issue/Edit/']"));
+                    var editHref = edit.GetAttribute("href");
+                    var editValue = edit.Text;
+                    var editIdString = editHref.Substring(editHref.LastIndexOf("/") + 1);
+                    var editId = int.Parse(editIdString);
+                    if (existingIds.Contains(editId))
+                        continue;
+
+                    Assert.Equal(data.Title, col1.Text);
+                    Assert.Equal(data.Description, col2.Text);
+                    return;
                 }
-                throw new NotFoundException("Expected row not found");
+                throw new NotFoundException("Did not find new Issue in table");
             }
         }
     }
