@@ -15,6 +15,6 @@ namespace ToDoApp.Models
         public Status Status { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime Created { get; set; }
+        public DateTime? Created { get; set; }
     }
 }

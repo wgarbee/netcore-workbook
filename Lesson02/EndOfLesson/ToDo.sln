@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo", "ToDo\ToDo.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagHelpers", "TagHelpers\TagHelpers.csproj", "{87330084-BC93-4D92-A1AD-76F9DE12B7CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagHelpers.Tests", "TagHelpers.Tests\TagHelpers.Tests.csproj", "{164489FA-9150-418F-A1B8-3CC364C6373E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{87330084-BC93-4D92-A1AD-76F9DE12B7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87330084-BC93-4D92-A1AD-76F9DE12B7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87330084-BC93-4D92-A1AD-76F9DE12B7CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164489FA-9150-418F-A1B8-3CC364C6373E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164489FA-9150-418F-A1B8-3CC364C6373E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164489FA-9150-418F-A1B8-3CC364C6373E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164489FA-9150-418F-A1B8-3CC364C6373E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

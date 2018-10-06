@@ -27,11 +27,27 @@ namespace ToDoApp.Controllers
             },
             new ToDo
             {
-                Id = 1,
+                Id = 2,
                 Title = "Add DateTime",
                 Description = "Should track when the ToDo was created",
                 Status = status[1],
                 Created = DateTime.Now.AddDays(10)
+            },
+            new ToDo
+            {
+                Id = 3,
+                Title = "Add day-of-the-week TagHelper",
+                Description = "Need an attribute we can use in our view that will pretty format the DateTime as a weekday when possible",
+                Status = status[1],
+                Created = null
+            },
+            new ToDo
+            {
+                Id = 4,
+                Title = "Add ViewComponent",
+                Description = "Should track when the ToDo was created",
+                Status = status[1],
+                Created = null
             }
         };
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -13,13 +12,6 @@ namespace TagHelpers
     [HtmlTargetElement("*", Attributes = "day-of-the-week")]
     public class DayOfTheWeekTagHelper : TagHelper
     {
-        private readonly IHtmlHelper _htmlHelper;
-
-        public DayOfTheWeekTagHelper(IHtmlHelper htmlHelper)
-        {
-            _htmlHelper = htmlHelper;
-        }
-
         /// <summary>
         /// An expression to be evaluated against the current model.
         /// </summary>
