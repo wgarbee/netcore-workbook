@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagHelpers", "TagHelpers\Ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagHelpers.Tests", "TagHelpers.Tests\TagHelpers.Tests.csproj", "{164489FA-9150-418F-A1B8-3CC364C6373E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringUtilities", "StringUtilities\StringUtilities.csproj", "{9E6B1104-6655-432F-9C11-442372C2DA8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringUtilities.Tests", "StringUtilities.Tests\StringUtilities.Tests.csproj", "{35E803F7-A4F5-4E09-827C-20CA4097E439}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{164489FA-9150-418F-A1B8-3CC364C6373E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{164489FA-9150-418F-A1B8-3CC364C6373E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{164489FA-9150-418F-A1B8-3CC364C6373E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E6B1104-6655-432F-9C11-442372C2DA8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E6B1104-6655-432F-9C11-442372C2DA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E6B1104-6655-432F-9C11-442372C2DA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E6B1104-6655-432F-9C11-442372C2DA8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35E803F7-A4F5-4E09-827C-20CA4097E439}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35E803F7-A4F5-4E09-827C-20CA4097E439}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35E803F7-A4F5-4E09-827C-20CA4097E439}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35E803F7-A4F5-4E09-827C-20CA4097E439}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

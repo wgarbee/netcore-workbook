@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>ToDoApp</AssemblyName>
+    <RootNamespace>ToDoApp</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StringUtilities\StringUtilities.csproj" />
     <ProjectReference Include="..\TagHelpers\TagHelpers.csproj" />
   </ItemGroup>
 
