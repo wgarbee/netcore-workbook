@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringUtilities", "StringUt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringUtilities.Tests", "StringUtilities.Tests\StringUtilities.Tests.csproj", "{35E803F7-A4F5-4E09-827C-20CA4097E439}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Test", "ToDoApp.Test\ToDoApp.Test.csproj", "{7C43C3A9-7D85-4805-A198-43E043F15A48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{35E803F7-A4F5-4E09-827C-20CA4097E439}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35E803F7-A4F5-4E09-827C-20CA4097E439}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35E803F7-A4F5-4E09-827C-20CA4097E439}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C43C3A9-7D85-4805-A198-43E043F15A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C43C3A9-7D85-4805-A198-43E043F15A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C43C3A9-7D85-4805-A198-43E043F15A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C43C3A9-7D85-4805-A198-43E043F15A48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

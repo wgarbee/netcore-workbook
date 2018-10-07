@@ -16,10 +16,11 @@ namespace ToDoApp.ViewComponents
             {
                 Title = x.Title,
                 Summary = x.Description,
-                Action = $"Due in {(x.Created?.Subtract(DateTime.Now).TotalDays ?? 0):N0} days",
-                Width = width
+                ActionDescription = $"Created {(x.Created?.Subtract(DateTime.Now).TotalDays ?? 0):N0} days ago",
+                ActionLink = Url.Action("Detail", "ToDo", x.Id),
+            Width = width
             });
             return View(model);
-        }
     }
+}
 }
