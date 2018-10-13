@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Created)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
@@ -38,7 +38,7 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @(item.Created < DateTime.Now.AddDays(7) ? item.Created.DayOfWeek.ToString() : item.Created.ToString("mm/dd/yyyy"))
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
