@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ToDoApp.Infrastructure;
 using WebServerUtilities;
 
 namespace ToDoApp
@@ -24,6 +25,8 @@ namespace ToDoApp
             services.AddSingleton<UnwrapExceptionMiddleware>();
             services.AddSingleton<InternalServerErrorStatusCodeMiddleware>();
 
+            services.AddHostedService<PurgeOldToDosService>();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -38,14 +41,14 @@ namespace ToDoApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Home/Error");
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
             app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
             app.UseMiddleware<InternalServerErrorStatusCodeMiddleware>();
             app.UseMiddleware<UnwrapExceptionMiddleware>();
