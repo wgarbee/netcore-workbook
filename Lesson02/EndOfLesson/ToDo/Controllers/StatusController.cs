@@ -1,40 +1,43 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Models;
 using ToDoApp.Services;
 
 namespace ToDoApp.Controllers
 {
-    public class ToDoController : Controller
+    public class StatusController : Controller
     {
-
-        // GET: ToDo
+        // GET: Status
         public ActionResult Index()
         {
-            return View(Repository.ToDos);
+            return View(Repository.Statuses);
         }
 
-        // GET: ToDo/Details/5
+        // GET: Status/Details/5
         public ActionResult Details(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(Repository.GetStatus(id));
         }
 
-        // GET: ToDo/Create
+        // GET: Status/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ToDo/Create
+        // POST: Status/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ToDo toDo)
+        public ActionResult Create(Status status)
         {
             try
             {
                 // TODO: Add insert logic here
-                Repository.Add(toDo);
+                Repository.Add(status);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -43,21 +46,21 @@ namespace ToDoApp.Controllers
             }
         }
 
-        // GET: ToDo/Edit/5
+        // GET: Status/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(Repository.GetStatus(id));
         }
 
-        // POST: ToDo/Edit/5
+        // POST: Status/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, ToDo toDo)
+        public ActionResult Edit(int id, Status status)
         {
             try
             {
                 // TODO: Add update logic here
-                Repository.Update(id, toDo);
+                Repository.Update(id, status);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -66,21 +69,21 @@ namespace ToDoApp.Controllers
             }
         }
 
-        // GET: ToDo/Delete/5
+        // GET: Status/Delete/5
         public ActionResult Delete(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(Repository.GetStatus(id));
         }
 
-        // POST: ToDo/Delete/5
+        // POST: Status/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, ToDo collection)
+        public ActionResult Delete(int id, Status status)
         {
             try
             {
                 // TODO: Add delete logic here
-                Repository.DeleteToDo(id);
+                Repository.DeleteStatus(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
