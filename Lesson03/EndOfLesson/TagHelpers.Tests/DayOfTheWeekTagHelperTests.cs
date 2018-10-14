@@ -40,7 +40,7 @@ namespace TagHelpers.Tests
         public void TagHelper_ShouldSetContentToDayOfWeekWhenWithin7DaysOfToday()
         {
             // Assemble
-            DateTime value = DateTime.Now;
+            DateTime value = DateTime.Now.AddDays(1);
             var myTagHelper = new DayOfTheWeekTagHelper();
             myTagHelper.For = GetModelExpression(value);
             Setup(value, (context, output) =>

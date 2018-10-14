@@ -22,10 +22,15 @@ namespace TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var value = For.Model as DateTime?;
+            var now = DateTime.Now;
 
-            if (DateTime.Now.AddDays(7) > value)
+            if (value >= now && Math.Abs((now - value).Value.Days) < 7)
             {
                 output.Content.SetContent(value.Value.DayOfWeek.ToString());
+            }
+            else if(value < now && Math.Abs((now - value).Value.Days) < 7)
+            {
+                output.Content.SetContent($"Last {value.Value.DayOfWeek}");
             }
             else
             {
