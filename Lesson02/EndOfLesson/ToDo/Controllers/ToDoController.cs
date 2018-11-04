@@ -11,13 +11,13 @@ namespace ToDoApp.Controllers
         // GET: ToDo
         public ActionResult Index()
         {
-            return View(Repository.ToDos);
+            return View(Repository.Instance().ToDos);
         }
 
         // GET: ToDo/Details/5
         public ActionResult Details(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(Repository.Instance().GetToDo(id));
         }
 
         // GET: ToDo/Create
@@ -31,10 +31,12 @@ namespace ToDoApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ToDo toDo)
         {
+            if (!ModelState.IsValid)
+                return View();
             try
             {
                 // TODO: Add insert logic here
-                Repository.Add(toDo);
+                Repository.Instance().Add(toDo);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -46,7 +48,7 @@ namespace ToDoApp.Controllers
         // GET: ToDo/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(Repository.Instance().GetToDo(id));
         }
 
         // POST: ToDo/Edit/5
@@ -57,7 +59,7 @@ namespace ToDoApp.Controllers
             try
             {
                 // TODO: Add update logic here
-                Repository.Update(id, toDo);
+                Repository.Instance().Update(id, toDo);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -69,7 +71,7 @@ namespace ToDoApp.Controllers
         // GET: ToDo/Delete/5
         public ActionResult Delete(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(Repository.Instance().GetToDo(id));
         }
 
         // POST: ToDo/Delete/5
@@ -80,7 +82,7 @@ namespace ToDoApp.Controllers
             try
             {
                 // TODO: Add delete logic here
-                Repository.DeleteToDo(id);
+                Repository.Instance().DeleteToDo(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -44,7 +44,8 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @item.Status?.Value
+                    @Html.DisplayFor(modelItem => item.Status.Value)
                 </td>
                 <td day-of-the-week asp-for="@item.Created"></td>
                 <td>

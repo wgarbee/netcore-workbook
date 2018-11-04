@@ -14,13 +14,13 @@ namespace ToDoApp.Controllers
         // GET: Status
         public ActionResult Index()
         {
-            return View(Repository.Statuses);
+            return View(Repository.Instance().Statuses);
         }
 
         // GET: Status/Details/5
         public ActionResult Details(int id)
         {
-            return View(Repository.GetStatus(id));
+            return View(Repository.Instance().GetStatus(id));
         }
 
         // GET: Status/Create
@@ -37,7 +37,7 @@ namespace ToDoApp.Controllers
             try
             {
                 // TODO: Add insert logic here
-                Repository.Add(status);
+                Repository.Instance().Add(status);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -49,7 +49,7 @@ namespace ToDoApp.Controllers
         // GET: Status/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(Repository.GetStatus(id));
+            return View(Repository.Instance().GetStatus(id));
         }
 
         // POST: Status/Edit/5
@@ -60,7 +60,7 @@ namespace ToDoApp.Controllers
             try
             {
                 // TODO: Add update logic here
-                Repository.Update(id, status);
+                Repository.Instance().Update(id, status);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -72,7 +72,7 @@ namespace ToDoApp.Controllers
         // GET: Status/Delete/5
         public ActionResult Delete(int id)
         {
-            return View(Repository.GetStatus(id));
+            return View(Repository.Instance().GetStatus(id));
         }
 
         // POST: Status/Delete/5
@@ -83,7 +83,7 @@ namespace ToDoApp.Controllers
             try
             {
                 // TODO: Add delete logic here
-                Repository.DeleteStatus(id);
+                Repository.Instance().DeleteStatus(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

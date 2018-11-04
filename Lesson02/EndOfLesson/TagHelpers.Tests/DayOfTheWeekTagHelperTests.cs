@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using TagHelpers.Tests.Intrastructure;
 using Xunit;
+using Moq;
 
 namespace TagHelpers.Tests
 {
@@ -40,8 +41,10 @@ namespace TagHelpers.Tests
         public void TagHelper_ShouldSetContentToDayOfWeekWhenWithin7DaysOfToday()
         {
             // Assemble
-            DateTime value = DateTime.Now.AddDays(1);
-            var myTagHelper = new DayOfTheWeekTagHelper();
+            DateTime value = DateTime.Now;
+            Mock<IDateTimeProvider> mock = new Mock<IDateTimeProvider>();
+            mock.SetupGet(x => x.Now).Returns(value.AddDays(-1));
+            var myTagHelper = new DayOfTheWeekTagHelper(mock.Object);
             myTagHelper.For = GetModelExpression(value);
             Setup(value, (context, output) =>
             {
@@ -58,7 +61,9 @@ namespace TagHelpers.Tests
         {
             // Assemble
             DateTime? value = null;
-            var myTagHelper = new DayOfTheWeekTagHelper();
+            Mock<IDateTimeProvider> mock = new Mock<IDateTimeProvider>();
+            mock.SetupGet(x => x.Now).Returns(DateTime.Now);
+            var myTagHelper = new DayOfTheWeekTagHelper(mock.Object);
             myTagHelper.For = GetModelExpression(value);
             Setup(value, (context, output) =>
             {
@@ -74,8 +79,10 @@ namespace TagHelpers.Tests
         public void TagHelper_ShouldSetContentToDateWhenWithin7DaysOfToday()
         {
             // Assemble
-            DateTime value = DateTime.Now.AddDays(8);
-            var myTagHelper = new DayOfTheWeekTagHelper();
+            DateTime value = DateTime.Now;
+            Mock<IDateTimeProvider> mock = new Mock<IDateTimeProvider>();
+            mock.SetupGet(x => x.Now).Returns(value.AddDays(-8));
+            var myTagHelper = new DayOfTheWeekTagHelper(mock.Object);
             myTagHelper.For = GetModelExpression(value);
             Setup(value, (context, output) =>
             {
@@ -91,8 +98,10 @@ namespace TagHelpers.Tests
         public void TagHelper_ShouldSetContentToDateAndRespectFormat()
         {
             // Assemble
-            DateTime value = DateTime.Now.AddDays(8);
-            var myTagHelper = new DayOfTheWeekTagHelper();
+            DateTime value = DateTime.Now;
+            Mock<IDateTimeProvider> mock = new Mock<IDateTimeProvider>();
+            mock.SetupGet(x => x.Now).Returns(value.AddDays(-8));
+            var myTagHelper = new DayOfTheWeekTagHelper(mock.Object);
             myTagHelper.For = GetModelExpression(value, "{0:yyyy}");
             Setup(value, (context, output) =>
             {
