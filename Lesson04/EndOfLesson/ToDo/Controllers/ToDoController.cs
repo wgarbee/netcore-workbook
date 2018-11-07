@@ -39,7 +39,7 @@ namespace ToDoApp.Controllers
         // POST: ToDo/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("Title,Description,Created,StatusId")]ToDo toDo)
+        public ActionResult Create(ToDo toDo)
         {
             try
             {
