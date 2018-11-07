@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ToDoApp.Data;
 using ToDoApp.Infrastructure;
+using ToDoApp.Services;
 using WebServerUtilities;
 
 namespace ToDoApp
@@ -26,6 +27,8 @@ namespace ToDoApp
         {
             services.AddSingleton<UnwrapExceptionMiddleware>();
             services.AddSingleton<InternalServerErrorStatusCodeMiddleware>();
+            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IReadOnlyToDoContext, ToDoContext>();
 
             services.AddHostedService<PurgeOldToDosService>();
 
@@ -36,7 +39,7 @@ namespace ToDoApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<AppContext>(config => config.UseSqlServer(Configuration.GetConnectionString("ToDoApp")));    
+            services.AddDbContext<ToDoContext>(config => config.UseSqlServer(Configuration.GetConnectionString("ToDoApp")));    
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -72,11 +75,9 @@ namespace ToDoApp
         {
             var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             using (var serviceScope = scopeFactory.CreateScope())
+            using (var context = serviceScope.ServiceProvider.GetService<ToDoContext>())
             {
-                using (var context = serviceScope.ServiceProvider.GetService<AppContext>())
-                {
-                    context.Database.EnsureCreated();
-                }
+                context.Database.EnsureCreated();
             }
         }
     }

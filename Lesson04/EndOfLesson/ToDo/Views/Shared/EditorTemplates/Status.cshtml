@@ -1,7 +1,8 @@
 ﻿@using ToDoApp.Services
 @model ToDoApp.Models.Status
+@inject IRepository repository
 @{
-    var items = Repository.Statuses.Select(x => new SelectListItem(x.Value, x.Id.ToString()));
+    var items = repository.Statuses.Select(x => new SelectListItem(x.Value, x.Id.ToString()));
 }
 
 <select asp-for="Id" asp-items="@items"></select>

@@ -1,120 +1,94 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Microsoft.EntityFrameworkCore;
+using ToDoApp.Data;
 using ToDoApp.Models;
 
 namespace ToDoApp.Services
 {
-    public class Repository
+    public class Repository : IRepository
     {
-        private static int statusKeyCounter = 3;
-        private static int toDoKeyCounter = 4;
+        private readonly ToDoContext _toDoContext;
+        private readonly IReadOnlyToDoContext _readOnlyToDoContext;
 
-        private static List<Status> _statuses = new List<Status>
+        public Repository(ToDoContext toDoContext, IReadOnlyToDoContext readOnlyToDoContext)
         {
-            new Status { Id = 1, Value = "Not Started" },
-            new Status { Id = 2, Value = "In Progress" },
-            new Status { Id = 3, Value = "Done" }
-        };
-
-        private static List<ToDo> _toDos = new List<ToDo>
-        {
-            new ToDo
-            {
-                Id = 1,
-                Title = "My First ToDo",
-                Description = "Get the app working",
-                Status = _statuses[2],
-                Created = DateTime.Today
-            },
-            new ToDo
-            {
-                Id = 2,
-                Title = "Add DateTime",
-                Description = "Should track when the ToDo was created",
-                Status = _statuses[1],
-                Created = DateTime.Today.AddDays(4)
-            },
-            new ToDo
-            {
-                Id = 3,
-                Title = "Add day-of-the-week TagHelper",
-                Description = "Need an attribute we can use in our view that will pretty format the DateTime as a weekday when possible",
-                Status = _statuses[1],
-                Created = DateTime.Today.AddDays(-4)
-            },
-            new ToDo
-            {
-                Id = 4,
-                Title = "Add ViewComponent",
-                Description = "Should track when the ToDo was created",
-                Status = _statuses[1],
-                Created = DateTime.Today.AddDays(-60)
-            },
-            new ToDo
-            {
-                Id = 5,
-                Title = "Make Tests Pass",
-                Description = "Should track when the ToDo was created",
-                Status = _statuses[1],
-                Created = DateTime.Today.AddDays(60)
-            }
-        };
-
-        public static IReadOnlyList<ToDo> ToDos => _toDos;
-
-        public static IReadOnlyList<Status> Statuses => _statuses;
-
-        public static void Add(ToDo toDo)
-        {
-            toDo.Id = Interlocked.Increment(ref toDoKeyCounter);
-            toDo.Status = _statuses.Find(x => x.Id == toDo.Status?.Id);
-            _toDos.Add(toDo);
+            _toDoContext = toDoContext;
+            _readOnlyToDoContext = readOnlyToDoContext;
         }
 
-        public static void Update(int id, ToDo toDo)
+        public IQueryable<ToDo> ToDos => _readOnlyToDoContext.ToDos;
+
+        public IQueryable<Status> Statuses => _readOnlyToDoContext.Statuses;
+
+        public void Add(ToDo toDo)
         {
-            var index = _toDos.FindIndex(x => x.Id == id);
-            _toDos.RemoveAt(index);
+            _toDoContext.ToDos.Add(toDo);
+            _toDoContext.SaveChanges();
+        }
+
+        public void Update(int id, ToDo toDo)
+        {
             toDo.Id = id;
-            toDo.Status = _statuses.Find(x => x.Id == toDo.Status?.Id);
-            _toDos.Insert(index, toDo);
+            _toDoContext.ToDos.Update(toDo);
+            _toDoContext.SaveChanges();
         }
 
-        public static void DeleteToDo(int id)
+        public void DeleteToDo(int id)
         {
-            var index = _toDos.FindIndex(x => x.Id == id);
-            _toDos.RemoveAt(index);
+            var toBeDeleted = _toDoContext.ToDos.Find(SelectToDoById(id));
+            _toDoContext.ToDos.Remove(toBeDeleted);
+            _toDoContext.SaveChanges();
         }
 
-        public static ToDo GetToDo(int id)
+        public ToDo GetToDo(int id)
         {
-            return _toDos.Find(x => x.Id == id);
+            return _readOnlyToDoContext.ToDos.Include(x => x.Status).First(SelectToDoById(id));
         }
 
-        public static void Add(Status status)
+        public void Add(Status status)
         {
-            status.Id = Interlocked.Increment(ref statusKeyCounter);
-            _statuses.Add(status);
+            _toDoContext.Statuses.Add(status);
+            _toDoContext.SaveChanges();
         }
 
-        public static void Update(int id, Status toDo)
+        public void Update(int id, Status status)
         {
-            var index = _statuses.FindIndex(x => x.Id == id);
-            _statuses.RemoveAt(index);
-            toDo.Id = id;
-            _statuses.Insert(index, toDo);
+            status.Id = id;
+            _toDoContext.Statuses.Update(status);
+            _toDoContext.SaveChanges();
         }
 
-        public static void DeleteStatus(int id)
+        public void DeleteStatus(int id)
         {
-            var index = _statuses.FindIndex(x => x.Id == id);
-            _statuses.RemoveAt(index);
+            var toBeDeleted = _toDoContext.Statuses.First(SelectStatusesById(id));
+            _toDoContext.Statuses.Remove(toBeDeleted);
+            _toDoContext.SaveChanges();
         }
 
-        public static Status GetStatus(int id)
+        public Status GetStatus(int id)
         {
-            return _statuses.Find(x => x.Id == id);
+            return _readOnlyToDoContext.Statuses.First(SelectStatusesById(id));
         }
+
+        #region Selector Functions
+        private static Func<ToDo, bool> SelectToDoById(int id)
+        {
+            return toDo => toDo.Id == id;
+        }
+
+        private static Func<Status, bool> SelectStatusesById(int id)
+        {
+            return status => status.Id == id;
+        }
+
+        public void Dispose()
+        {
+            _toDoContext?.Dispose();
+            (_readOnlyToDoContext as IDisposable)?.Dispose();
+        }
+        #endregion
     }
 }

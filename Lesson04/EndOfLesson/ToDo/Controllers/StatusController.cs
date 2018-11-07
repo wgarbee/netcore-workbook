@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ToDoApp.Models;
 using ToDoApp.Services;
 
@@ -11,16 +8,25 @@ namespace ToDoApp.Controllers
 {
     public class StatusController : Controller
     {
+        private readonly IRepository _repository;
+        private readonly ILogger<StatusController> _logger;
+
+        public StatusController(IRepository repository, ILogger<StatusController> logger)
+        {
+            _repository = repository;
+            _logger = logger;
+        }
+
         // GET: Status
         public ActionResult Index()
         {
-            return View(Repository.Statuses);
+            return View(_repository.Statuses);
         }
 
         // GET: Status/Details/5
         public ActionResult Details(int id)
         {
-            return View(Repository.GetStatus(id));
+            return View(_repository.GetStatus(id));
         }
 
         // GET: Status/Create
@@ -36,20 +42,19 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-                Repository.Add(status);
+                _repository.Add(status);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
         }
 
         // GET: Status/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(Repository.GetStatus(id));
+            return View(_repository.GetStatus(id));
         }
 
         // POST: Status/Edit/5
@@ -59,20 +64,19 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-                Repository.Update(id, status);
+                _repository.Update(id, status);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
         }
 
         // GET: Status/Delete/5
         public ActionResult Delete(int id)
         {
-            return View(Repository.GetStatus(id));
+            return View(_repository.GetStatus(id));
         }
 
         // POST: Status/Delete/5
@@ -82,14 +86,20 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-                Repository.DeleteStatus(id);
+                _repository.DeleteStatus(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
+        }
+
+        private ActionResult ErrorView(Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "Unknown Error");
+            _logger.LogError(ex, "Unknown Error");
+            return View();
         }
     }
 }

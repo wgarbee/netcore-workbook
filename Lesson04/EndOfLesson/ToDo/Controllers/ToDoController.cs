@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using ToDoApp.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ToDoApp.Models;
 using ToDoApp.Services;
 
@@ -8,23 +9,25 @@ namespace ToDoApp.Controllers
 {
     public class ToDoController : Controller
     {
-        private readonly AppContext _appContext;
+        private readonly IRepository _repository;
+        private readonly ILogger<ToDoController> _logger;
 
-        public ToDoController(AppContext appContext)
+        public ToDoController(IRepository repository, ILogger<ToDoController> logger)
         {
-            _appContext = appContext;
+            _repository = repository;
+            _logger = logger;
         }
 
         // GET: ToDo
         public ActionResult Index()
         {
-            return View(_appContext.ToDos);
+            return View(_repository.ToDos.Include(x => x.Status));
         }
 
         // GET: ToDo/Details/5
         public ActionResult Details(int id)
         {
-            return View(_appContext.ToDos.Find(id));
+            return View(_repository.GetToDo(id));
         }
 
         // GET: ToDo/Create
@@ -36,24 +39,23 @@ namespace ToDoApp.Controllers
         // POST: ToDo/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ToDo toDo)
+        public ActionResult Create([Bind("Title,Description,Created,StatusId")]ToDo toDo)
         {
             try
             {
-                // TODO: Add insert logic here
-                _appContext.Add(toDo);
+                _repository.Add(toDo);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
         }
 
         // GET: ToDo/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(_appContext.ToDos.Find(id));
+            return View(_repository.GetToDo(id));
         }
 
         // POST: ToDo/Edit/5
@@ -63,21 +65,19 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-                toDo.Id = id;
-                _appContext.ToDos.Update(toDo);
+                _repository.Update(id, toDo);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
         }
 
         // GET: ToDo/Delete/5
         public ActionResult Delete(int id)
         {
-            return View(_appContext.ToDos.Find(id));
+            return View(_repository.GetToDo(id));
         }
 
         // POST: ToDo/Delete/5
@@ -87,15 +87,20 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-                var toDo = _appContext.ToDos.Find(id);
-                _appContext.ToDos.Remove(toDo);
+                _repository.DeleteToDo(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
+        }
+
+        private ActionResult ErrorView(Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "Unknown Error");
+            _logger.LogError(ex, "Unknown Error");
+            return View();
         }
     }
 }
