@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Moq;
 using ToDoApp.Models;
+using ToDoApp.Services;
 using ToDoApp.ViewComponents;
 using Xunit;
 
@@ -17,7 +18,14 @@ namespace ToDoApp.Test
         public void CardGroup_ShouldGetRequestedCountForView()
         {
             // Arrange
-            var viewComponent = new CardGroupViewComponent();
+            var mock = new Mock<IRepository>();
+            mock.SetupGet(x => x.ToDos).Returns(new List<ToDo>
+            {
+                new ToDo(),
+                new ToDo(),
+                new ToDo()
+            });
+            var viewComponent = new CardGroupViewComponent(mock.Object);
             var urlHelper = new Mock<IUrlHelper>();
             urlHelper.Setup(o => o.Action(It.IsAny<UrlActionContext>())).Returns("action/controller");
             viewComponent.Url = urlHelper.Object;
@@ -35,7 +43,14 @@ namespace ToDoApp.Test
         {
             // Arrange
             var regex = new Regex("Created (.*) days ago");
-            var viewComponent = new CardGroupViewComponent();
+            var mock = new Mock<IRepository>();
+            mock.SetupGet(x => x.ToDos).Returns(new List<ToDo>
+            {
+                new ToDo(),
+                new ToDo(),
+                new ToDo()
+            });
+            var viewComponent = new CardGroupViewComponent(mock.Object);
             var urlHelper = new Mock<IUrlHelper>();
             urlHelper.Setup(o => o.Action(It.IsAny<UrlActionContext>())).Returns("action/controller");
             viewComponent.Url = urlHelper.Object;

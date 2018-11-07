@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ToDoApp.Services;
@@ -11,11 +12,13 @@ namespace ToDoApp.Infrastructure
 {
     public class PurgeOldToDosService : IHostedService, IDisposable
     {
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger _logger;
         private Timer _timer;
 
-        public PurgeOldToDosService(ILogger<PurgeOldToDosService> logger)
+        public PurgeOldToDosService(IServiceScopeFactory serviceScopeFactory, ILogger<PurgeOldToDosService> logger)
         {
+            _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
         }
 
@@ -31,12 +34,16 @@ namespace ToDoApp.Infrastructure
         {
             _logger.LogDebug("Triggered {0}...", nameof(PurgeOldToDosService));
 
-            var shallowCopy = Repository.ToDos.ToList();
-            var now = DateTime.Now;
-            foreach (var toDo in shallowCopy.Where(x => x.Created.HasValue))
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                if (toDo.Created.Value.AddMonths(1) < now)
-                    Repository.DeleteToDo(toDo.Id);
+                var repository = scope.ServiceProvider.GetService<IRepository>();
+                var shallowCopy = repository.ToDos.ToList();
+                var now = DateTime.Now;
+                foreach (var toDo in shallowCopy.Where(x => x.Created.HasValue))
+                {
+                    if (toDo.Created.Value.AddMonths(1) < now)
+                        repository.DeleteToDo(toDo.Id);
+                }
             }
 
             _logger.LogDebug("{0} completed.", nameof(PurgeOldToDosService));

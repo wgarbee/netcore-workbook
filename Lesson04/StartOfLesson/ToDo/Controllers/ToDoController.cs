@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ToDoApp.Models;
 using ToDoApp.Services;
 
@@ -7,17 +9,25 @@ namespace ToDoApp.Controllers
 {
     public class ToDoController : Controller
     {
+        private readonly IRepository _repository;
+        private readonly ILogger<ToDoController> _logger;
+
+        public ToDoController(IRepository repository, ILogger<ToDoController> logger)
+        {
+            _repository = repository;
+            _logger = logger;
+        }
 
         // GET: ToDo
         public ActionResult Index()
         {
-            return View(Repository.ToDos);
+            return View(_repository.ToDos);
         }
 
         // GET: ToDo/Details/5
         public ActionResult Details(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(_repository.GetToDo(id));
         }
 
         // GET: ToDo/Create
@@ -33,20 +43,19 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-                Repository.Add(toDo);
+                _repository.Add(toDo);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
         }
 
         // GET: ToDo/Edit/5
         public ActionResult Edit(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(_repository.GetToDo(id));
         }
 
         // POST: ToDo/Edit/5
@@ -56,20 +65,19 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-                Repository.Update(id, toDo);
+                _repository.Update(id, toDo);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
         }
 
         // GET: ToDo/Delete/5
         public ActionResult Delete(int id)
         {
-            return View(Repository.GetToDo(id));
+            return View(_repository.GetToDo(id));
         }
 
         // POST: ToDo/Delete/5
@@ -79,14 +87,20 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-                Repository.DeleteToDo(id);
+                _repository.DeleteToDo(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return ErrorView(ex);
             }
+        }
+
+        private ActionResult ErrorView(Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "Unknown Error");
+            _logger.LogError(ex, "Unknown Error");
+            return View();
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ToDoApp.Infrastructure;
+using ToDoApp.Services;
 using WebServerUtilities;
 
 namespace ToDoApp
@@ -24,6 +25,7 @@ namespace ToDoApp
         {
             services.AddSingleton<UnwrapExceptionMiddleware>();
             services.AddSingleton<InternalServerErrorStatusCodeMiddleware>();
+            services.AddSingleton<IRepository, Repository>();
 
             services.AddHostedService<PurgeOldToDosService>();
 
