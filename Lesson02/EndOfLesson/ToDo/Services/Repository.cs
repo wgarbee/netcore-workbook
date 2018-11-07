@@ -1,11 +1,11 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Threading;
 using ToDoApp.Models;
 
 namespace ToDoApp.Services
 {
-    public class Repository
+    public class Repository : IRepository
     {
         private static int statusKeyCounter = 3;
         private static int toDoKeyCounter = 4;
@@ -61,18 +61,31 @@ namespace ToDoApp.Services
             }
         };
 
-        public static IReadOnlyList<ToDo> ToDos => _toDos;
+        private static IRepository _instance;
 
-        public static IReadOnlyList<Status> Statuses => _statuses;
+        public static IRepository Instance()
+        {
+            if (_instance == null)
+                _instance = new Repository();
+            return _instance;
+        }
 
-        public static void Add(ToDo toDo)
+        private Repository()
+        {
+        }
+
+        public IReadOnlyList<ToDo> ToDos => _toDos;
+
+        public IReadOnlyList<Status> Statuses => _statuses;
+
+        public void Add(ToDo toDo)
         {
             toDo.Id = Interlocked.Increment(ref toDoKeyCounter);
             toDo.Status = _statuses.Find(x => x.Id == toDo.Status?.Id);
             _toDos.Add(toDo);
         }
 
-        public static void Update(int id, ToDo toDo)
+        public void Update(int id, ToDo toDo)
         {
             var index = _toDos.FindIndex(x => x.Id == id);
             _toDos.RemoveAt(index);
@@ -81,24 +94,24 @@ namespace ToDoApp.Services
             _toDos.Insert(index, toDo);
         }
 
-        public static void DeleteToDo(int id)
+        public void DeleteToDo(int id)
         {
             var index = _toDos.FindIndex(x => x.Id == id);
             _toDos.RemoveAt(index);
         }
 
-        public static ToDo GetToDo(int id)
+        public ToDo GetToDo(int id)
         {
             return _toDos.Find(x => x.Id == id);
         }
 
-        public static void Add(Status status)
+        public void Add(Status status)
         {
             status.Id = Interlocked.Increment(ref statusKeyCounter);
             _statuses.Add(status);
         }
 
-        public static void Update(int id, Status toDo)
+        public void Update(int id, Status toDo)
         {
             var index = _statuses.FindIndex(x => x.Id == id);
             _statuses.RemoveAt(index);
@@ -106,13 +119,13 @@ namespace ToDoApp.Services
             _statuses.Insert(index, toDo);
         }
 
-        public static void DeleteStatus(int id)
+        public void DeleteStatus(int id)
         {
             var index = _statuses.FindIndex(x => x.Id == id);
             _statuses.RemoveAt(index);
         }
 
-        public static Status GetStatus(int id)
+        public Status GetStatus(int id)
         {
             return _statuses.Find(x => x.Id == id);
         }

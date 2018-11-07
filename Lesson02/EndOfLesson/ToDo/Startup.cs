@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TagHelpers;
+using ToDoApp.Services;
 
 namespace ToDoApp
 {
@@ -25,7 +27,8 @@ namespace ToDoApp
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            services.AddSingleton(sp => Repository.Instance());
+            services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

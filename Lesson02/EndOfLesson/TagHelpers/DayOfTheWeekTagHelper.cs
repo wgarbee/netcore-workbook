@@ -12,6 +12,13 @@ namespace TagHelpers
     [HtmlTargetElement("*", Attributes = "day-of-the-week")]
     public class DayOfTheWeekTagHelper : TagHelper
     {
+        private readonly IDateTimeProvider _dateTimeProvider;
+
+        public DayOfTheWeekTagHelper(IDateTimeProvider dateTimeProvider)
+        {
+            _dateTimeProvider = dateTimeProvider;
+        }
+
         /// <summary>
         /// An expression to be evaluated against the current model.
         /// </summary>
@@ -22,7 +29,7 @@ namespace TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var value = For.Model as DateTime?;
-            var now = DateTime.Now;
+            var now = _dateTimeProvider.Now;
 
             if (value >= now && Math.Abs((now - value).Value.Days) < 7)
             {
