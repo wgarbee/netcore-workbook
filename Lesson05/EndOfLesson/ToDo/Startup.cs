@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ToDoApp.Areas.Tags.Data;
 using ToDoApp.Data;
 using ToDoApp.Infrastructure;
 using ToDoApp.Services;
@@ -66,6 +67,9 @@ namespace ToDoApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Tag}/{action=Index}/{id?}");
             });
             EnsureDatabaseUpdated(app);   
         }
@@ -75,9 +79,11 @@ namespace ToDoApp
         {
             var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             using (var serviceScope = scopeFactory.CreateScope())
-            using (var context = serviceScope.ServiceProvider.GetService<ToDoContext>())
+            using (var toDoContext = serviceScope.ServiceProvider.GetService<ToDoContext>())
+            using (var tagContext = serviceScope.ServiceProvider.GetService<TagContext>())
             {
-                context.Database.EnsureCreated();
+                toDoContext.Database.Migrate();
+                tagContext.Database.Migrate();
             }
         }
     }

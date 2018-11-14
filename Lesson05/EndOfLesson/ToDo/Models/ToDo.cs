@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ToDoApp.Areas.Tags.Models;
 
 namespace ToDoApp.Models
 {
@@ -19,5 +21,7 @@ namespace ToDoApp.Models
 
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? Created { get; set; }
+
+        public List<Tag> Tags { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,12 +10,14 @@ namespace ToDoApp.Data
 {
     public class ToDoContext : DbContext, IReadOnlyToDoContext
     {
-        public ToDoContext(DbContextOptions options) : base(options)
+        public ToDoContext(DbContextOptions<ToDoContext> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("ToDos");
+
             modelBuilder.Entity<ToDo>().HasKey(x => x.Id).ForSqlServerIsClustered();
             modelBuilder.Entity<ToDo>().Property(x => x.Id).UseSqlServerIdentityColumn();
             modelBuilder.Entity<ToDo>().HasOne(x => x.Status).WithMany(x => x.ToDos).HasForeignKey(x => x.StatusId);
