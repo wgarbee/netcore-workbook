@@ -45,7 +45,10 @@ namespace ToDoApp.Services
 
         public ToDo GetToDo(int id)
         {
-            return _readOnlyToDoContext.ToDos.Include(x => x.Status).First(SelectToDoById(id));
+            return _readOnlyToDoContext.ToDos
+                .Include(x => x.Status)
+                .Include(x => x.Tag)
+                .First(SelectToDoById(id));
         }
 
         public void Add(Status status)

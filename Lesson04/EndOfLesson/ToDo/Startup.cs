@@ -15,6 +15,7 @@ namespace ToDoApp
 {
     public class Startup
     {
+    
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,7 +32,7 @@ namespace ToDoApp
             services.AddScoped<IReadOnlyToDoContext, ToDoContext>();
 
             services.AddHostedService<PurgeOldToDosService>();
-
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
