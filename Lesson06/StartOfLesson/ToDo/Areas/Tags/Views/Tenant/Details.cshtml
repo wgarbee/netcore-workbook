@@ -1,0 +1,33 @@
+@model ToDoApp.Areas.Tags.Models.Tenant
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Tenant</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    <h4>Tags</h4>
+    <div class="container-fluid">
+        <div class="list-group">
+            @foreach (var item in Model.Tags)
+            {
+                <a class="list-group-item col-xs-2" asp-area="Tags" asp-controller="Tag" asp-action="Edit" asp-all-route-data="@(new Dictionary<string, string>{ { "tenantId", item.TenantId.ToString() }, { "id" , item.Id.ToString() } })">@item.Value</a>
+            }
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

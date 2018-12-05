@@ -34,7 +34,7 @@ namespace BankWithUs
             });
 
             services.AddDbContext<BankContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("BankDatabase")));
-
+            services.AddTransient<IBankContext, BankContext>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -62,8 +62,9 @@ namespace BankWithUs
                     template: "{controller=Accounts}/{action=Index}/{id?}");
             });
 
-            using (var scope = app.ApplicationServices.CreateScope())
-            using(var context = scope.ServiceProvider.GetService<BankContext>())
+            //using (var scope = app.ApplicationServices.CreateScope())
+            //using(var context = scope.ServiceProvider.GetService<BankContext>())
+            using (var context = new BankContext())
             {
                 context.Database.EnsureCreated();
             }

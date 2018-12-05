@@ -13,13 +13,19 @@ namespace BankWithUs.Controllers
 {
     public class AccountsController : Controller
     {
+        private readonly IBankContext _context;
+
+        public AccountsController(IBankContext context)
+        {
+            _context = context;
+        }
+
         // GET: Accounts
         public async Task<IActionResult> Index()
         {
-            using (var context = new BankContext())
-            {
-                return View(await context.Accounts.ToListAsync());
-            }
+            
+                return View(await _context.Accounts.ToListAsync());
+            
         }
 
         // GET: Accounts/Details/5
@@ -30,9 +36,8 @@ namespace BankWithUs.Controllers
                 return NotFound();
             }
 
-            using (var context = new BankContext())
-            {
-                var account = await context.Accounts
+           
+                var account = await _context.Accounts
                   .FirstOrDefaultAsync(m => m.Id == id);
                 if (account == null)
                 {
@@ -40,7 +45,7 @@ namespace BankWithUs.Controllers
                 }
 
                 return View(account);
-            }
+            
         }
 
         // GET: Accounts/Create
@@ -60,9 +65,9 @@ namespace BankWithUs.Controllers
             {
                 return View(account);
             }
-            using (var context = new BankContext())
-            {
-                if (context.Accounts.Any(a => a.Name == account.Name))
+            var task = _context.Update(null);
+            var count = task.CurrentValues;
+                if (_context.Accounts.Any(a => a.Name == account.Name))
                 {
                     return new StatusCodeResult((int)System.Net.HttpStatusCode.UnprocessableEntity);
                 }
@@ -72,10 +77,10 @@ namespace BankWithUs.Controllers
                     return new StatusCodeResult((int)System.Net.HttpStatusCode.BadRequest);
                 }
                 account.DateCreated = DateTime.Now;
-                context.Add(account);
-                await context.SaveChangesAsync();
+                _context.AddEntity(account);
+                await _context.SaveChangesAsync();
                 return View(nameof(Details), account);
-            }
+            
         }
 
         // GET: Accounts/Edit/5
@@ -86,15 +91,14 @@ namespace BankWithUs.Controllers
                 return NotFound();
             }
 
-            using (var context = new BankContext())
-            {
-                var account = await context.Accounts.FindAsync(id);
+            
+                var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id);
                 if (account == null)
                 {
                     return NotFound();
                 }
                 return View(account);
-            }
+            
         }
 
         // POST: Accounts/Edit/5
@@ -111,16 +115,15 @@ namespace BankWithUs.Controllers
 
             if (ModelState.IsValid)
             {
-                using (var context = new BankContext())
-                {
+                
                     try
                     {
-                            context.Update(account);
-                            await context.SaveChangesAsync();
+                            _context.Update(account);
+                            await _context.SaveChangesAsync();
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!AccountExists(context, account.Id))
+                        if (!AccountExists(account.Id))
                         {
                             return NotFound();
                         }
@@ -128,7 +131,7 @@ namespace BankWithUs.Controllers
                         {
                             throw;
                         }
-                    }
+                    
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -143,9 +146,8 @@ namespace BankWithUs.Controllers
                 return NotFound();
             }
 
-            using (var context = new BankContext())
-            {
-                var account = await context.Accounts
+           
+                var account = await _context.Accounts
                     .FirstOrDefaultAsync(m => m.Id == id);
                 if (account == null)
                 {
@@ -153,7 +155,7 @@ namespace BankWithUs.Controllers
                 }
 
                 return View(account);
-            }
+            
         }
 
         // POST: Accounts/Delete/5
@@ -161,13 +163,12 @@ namespace BankWithUs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            using (var context = new BankContext())
-            {
-                var account = await context.Accounts.FindAsync(id);
-                context.Accounts.Remove(account);
-                await context.SaveChangesAsync();
+           
+                var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                _context.Remove(account);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
+            
         }
 
         private async Task<bool> VerifyWithFBI(string ssn)
@@ -184,9 +185,9 @@ namespace BankWithUs.Controllers
             }
         }
 
-        private bool AccountExists(BankContext context, int id)
+        private bool AccountExists(int id)
         {
-            return context.Accounts.Any(e => e.Id == id);
+            return _context.Accounts.Any(e => e.Id == id);
         }
     }
 }
