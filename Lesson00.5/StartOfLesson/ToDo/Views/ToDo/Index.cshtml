@@ -1,0 +1,18 @@
+﻿@model List<ToDo>
+
+<h2>Index</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Description</th>
+    </tr>
+    @foreach (ToDo toDo in Model)
+    {
+        <tr>
+            <td>@toDo.ID</td>
+            <td>@toDo.Description</td>
+            <td>@Html.Partial("DisplayTemplates/Status", toDo.Status)</td>
+        </tr>
+    }
+</table>
