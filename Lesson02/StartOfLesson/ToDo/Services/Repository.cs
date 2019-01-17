@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using ToDoApp.Models;
 
@@ -33,7 +34,7 @@ namespace ToDoApp.Services
                 Title = "Add DateTime",
                 Description = "Should track when the ToDo was created",
                 Status = _statuses[1],
-                Created = DateTime.Today.AddDays(4)
+                Created = DateTime.Today.AddDays(-8)
             },
             new ToDo
             {
