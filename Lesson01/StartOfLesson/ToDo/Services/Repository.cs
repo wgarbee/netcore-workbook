@@ -36,6 +36,22 @@ namespace ToDoApp.Services
             toDo.Id = Convert.ToInt32(collection["Id"]);
             toDo.Description = collection["Description"];
             toDo.Title = collection["Title"];
+            
+            if (collection["Status.Value"] == "Not Started")
+            {
+                toDo.Status.Value = "Not Started";
+                toDo.Status.Id = 1;
+            }
+            else if (collection["Status.Value"] == "In Progress")
+            {
+                toDo.Status.Value = "In Progress";
+                toDo.Status.Id = 2;
+            }
+            else if (collection["Status.Value"] == "Done")
+            {
+                toDo.Status.Value = "Done";
+                toDo.Status.Id = 3;
+            }
         }
 
         // Do not need to get anything from the list

@@ -34,7 +34,7 @@ namespace ToDoApp.Controllers
         {
             try
             {
-                // call the repository with the new method we going to create
+                // call the repository with the new method we are going to create
                 Repository.CreateToDo(collection);
 
                 return RedirectToAction(nameof(Index));
