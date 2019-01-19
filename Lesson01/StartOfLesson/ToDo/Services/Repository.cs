@@ -59,7 +59,14 @@ namespace ToDoApp.Services
         // Add new todo to list
         public static void CreateToDo(IFormCollection collection)
         {
-            ToDo toDo = new ToDo { Id = Convert.ToInt32(collection["Id"]), Description = collection["Description"], Title = collection["Title"], Status = status[1] };
+            ToDo toDo = new ToDo
+            {
+                Id = Convert.ToInt32(collection["Id"]),
+                Description = collection["Description"],
+                Title = collection["Title"],
+                Status = status[1]
+            };
+
             list.Add(toDo);
         }
 
