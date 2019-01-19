@@ -13,16 +13,11 @@ namespace ToDoApp.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            string stringDate = toDoDate < DateTime.Now.AddDays(7) 
+            string stringDate = toDoDate > DateTime.Now.AddDays(-7) 
                 ? toDoDate.DayOfWeek.ToString() 
                 : toDoDate.ToString("M/d/yyyy");
 
             output.Content.SetContent(stringDate);
         }
     }
-
-    //[HtmlTargetElement("input")]
-    //public class AutoComplete
-
-    // output.Attributes.Add("", "");
 }
