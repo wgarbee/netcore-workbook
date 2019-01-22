@@ -14,6 +14,4 @@ namespace ToDoApp.TagHelpers
             output.Attributes.Add("autocomplete", "off");
         }
     }
-
-    //output.Attributes.Add("", "");
 }

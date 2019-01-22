@@ -38,7 +38,8 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td DayOfWeek to-do-date="item.Created">
-                    @*@(item.Created < DateTime.Now.AddDays(7) ? item.Created.DayOfWeek.ToString() : item.Created.ToString("mm/dd/yyyy"))*@
+                    @* Removed as this is now in the repository *@
+                    @* @(item.Created < DateTime.Now.AddDays(7) ? item.Created.DayOfWeek.ToString() : item.Created.ToString("mm/dd/yyyy"))*@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
