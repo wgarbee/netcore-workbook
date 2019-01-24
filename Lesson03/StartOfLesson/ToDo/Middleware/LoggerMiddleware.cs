@@ -23,7 +23,7 @@ namespace ToDoApp.MiddleWare
             // Only happens when ToDoController has been called out
 
             _logger.LogError("This is " + context.Request.Path.ToString());
-            //context.Request.
+            
 
             await next(context);
         }
