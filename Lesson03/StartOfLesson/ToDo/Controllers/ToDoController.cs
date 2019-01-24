@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using ToDoApp.MiddleWare;
 using ToDoApp.Models;
 using ToDoApp.Services;
 
@@ -7,10 +9,18 @@ namespace ToDoApp.Controllers
 {
     public class ToDoController : Controller
     {
+        private readonly ILogger _logger;
+
+        //// Constructor
+        //public ToDoController(ILogger<ToDoController> logger)
+        //{
+        //    _logger = logger;
+        //}
 
         // GET: ToDo
         public ActionResult Index()
         {
+            //_logger.LogError("ToDo Controller - Index Action\n\n\n\n");
             return View(Repository.ToDos);
         }
 
