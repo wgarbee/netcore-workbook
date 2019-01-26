@@ -41,14 +41,21 @@ namespace ToDoApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ToDo toDo)
         {
-            try
+            if (ModelState.IsValid)
             {
-                _repository.Add(toDo);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _repository.Add(toDo);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    return ErrorView(ex);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                return ErrorView(ex);
+                return View();
             }
         }
 
