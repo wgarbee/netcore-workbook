@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http.Routing;
 
 namespace ToDoApp.MiddleWare
 {
@@ -21,7 +23,7 @@ namespace ToDoApp.MiddleWare
             // Change the message
             // Show the controller name, the action, and the ID if available
             // Only happens when ToDoController has been called out
-
+            //_logger.LogError(context);
             _logger.LogError("This is " + context.Request.Path.ToString());
             // context -> route data values containskey 
 
